@@ -1,47 +1,65 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <functional>
+#include <climits>
+
+#include "../_utils.cpp"
 using namespace std;
 
+
+
 template<class T>
-struct segment{
+struct segment {
     using BinaryOperation = function<T(T,T)>;
-    segment(BinaryOperation agg) : _agg(agg) {}
     vector<T> vals;
     vector<T> tree;
     BinaryOperation _agg;
     int N;
+    T _id_elem;
 
-
-    void array_init() {
-        cin >> N;
-        vals.resize(N+1);
-        tree.resize(2*N+1);
-        for(int i=1;i<=N;i++) cin >> vals[i];
-        init(1);
+    void init(const vector<T> values, T id_elem, BinaryOperation agg) {
+        _agg = agg;
+        _id_elem = id_elem;
+        vals = values;
+        N = values.size() - 1;
+        tree.resize(2*N + 1);
+        _init_tree(1);
     }
-    
-    T init(int k) {
+
+    segment(istream &stream, T id_elem, BinaryOperation agg) {
+        vector<T> values;
+        stream >> N;
+        values.resize(N + 1);
+        for (int i = 1; i <= N; i++) stream >> values[i];
+        init(values, id_elem, agg);
+    }
+
+    // values[0] must be a dummy element.
+    segment(const vector<T> values, T id_elem, BinaryOperation agg) { init(values, id_elem, agg); }
+
+    T _init_tree(int k) {
         if (k == N) return tree[k] = tree[2*k] = vals[N];
         if (k > N) return tree[k] = vals[k - N];
-        return tree[k] = _agg(init(2*k), init(2*k+1));
+        return tree[k] = _agg(_init_tree(2*k), _init_tree(2*k+1));
     }
-    
+
     void update(int k, int x) {
         k += N;
         tree[k] = x;
         for (k >>= 1; k >= 1; k >>= 1)
             tree[k] = _agg(tree[2*k], tree[2*k+1]);
     }
-    
+
     void add(int k, int x) {
         k += N;
         tree[k] += x;
         for(k >>= 1; k >= 1; k >>= 1)
             tree[k] = _agg(tree[2*k], tree[2*k+1]);
     }
-    
+
     T query(int a, int b) {
         a += N; b += N;
-        T res = 0;
+        T res = _id_elem;
         while (a <= b) {
             if (a % 2) res = _agg(res, tree[a++]);
             if (!(b % 2)) res = _agg(res, tree[b--]);
@@ -49,56 +67,43 @@ struct segment{
         }
         return res;
     }
-    
-    void print() {
-        for(auto elem : vals) cout << elem << " ";
-        cout << endl;
-        for(auto elem : tree) cout << elem << " ";
-        cout << endl;
-    }
-};
 
-template<typename T=void>
-struct minn;
-
-template<>
-struct minn<void> {
-    template<typename T, typename U>
-    constexpr auto operator()(T&& lhs, U&& rhs) const
-    -> decltype(min(std::forward<T>(lhs), std::forward<U>(rhs))) {
-        return min(std::forward<T>(lhs), std::forward<U>(rhs));
-    }
-};
-
-template<typename T=void>
-struct maxx;
-
-
-template<>
-struct maxx<void> {
-    template<typename T, typename U>
-    constexpr auto operator()(T&& lhs, U&& rhs) const
-    -> decltype(max(std::forward<T>(lhs), std::forward<U>(rhs))) {
-        return max(std::forward<T>(lhs), std::forward<U>(rhs));
+    friend ostream& operator<<(ostream& os, const segment<T>& sg) {
+        os << sg.vals;
+        os << sg.tree;
+        return os;
     }
 };
 
 
-
-// range updates with difference array is enough [a, b] by k is diff[a] + k and diff[b+1] - k
 
 
 int main(int argc, char const *argv[]) {
+    
 
-
-    segment<int> S(plus<>{});
+    segment<int> S(
+        cin,
+        INT_MIN,
+        [&](int p, int q) { return max(p , q);});
     // segment<int> S(minn<>{});
     // segment<int> S(maxx<>{});
-    S.array_init();
-    cout << S.query(1, 8) << endl;
+    cout << S << "naber"<< endl;
+    // cout << S.query(1, 8) << endl;
+    vector<vector<int>> nope {{1,2,3,4}, {2,4,5,2}, {10,3,1,2}};
+    vector<int> dope {1,2,3,4};
+    cout << ' ' << nope;
 
 
     
     return 0;
 
 }
+
+/*
+In file included from segment.cpp:6:
+./_utils.cpp:20:12: error: invalid operands to binary expression ('std::__1::ostream' (aka 'basic_ostream<char>') and
+      'const std::__1::vector<int, std::__1::allocator<int> >')
+        os << *it << endl;
+        ~~ ^  ~~~
+
+*/
