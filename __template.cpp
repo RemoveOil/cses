@@ -1,6 +1,8 @@
 #include <iostream>
 #include "../_utils.cpp"
 
+#define COMP_MAX_INT (1e17)
+
 using namespace std;
 
 using ulli = unsigned long long int;
