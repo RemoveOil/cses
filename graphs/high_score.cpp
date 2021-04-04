@@ -1,4 +1,11 @@
 #include <iostream>
+#include "../_utils.cpp"
+#include "../structures/weighted_graph.cpp"
+
+#define COMP_MAX_INT (1e17)
+
+
+#include <iostream>
 #include <vector>
 #include <set>
 
@@ -68,3 +75,60 @@ struct WGraph {
         return os;
     }
 };
+
+using namespace std;
+
+using ulli = unsigned long long int;
+using lli = long long int;
+
+vector<lli> distances;
+
+WGraph read_graph() {
+    int N, M;
+    cin >> N >> M;
+    WGraph graph(N, true);
+    for (int i, src, dst, w = 0; i < M; ++i) {
+        cin >> src >> dst >> w;
+        graph.add_edge(src, dst, -w);
+    }
+
+    return graph;
+}
+
+
+lli bellman_ford(const WGraph &g) {
+    distances = vector<lli>(g.N + 1, COMP_MAX_INT);
+    vector<bool> goesToM(g.N + 1, false);
+    goesToM[g.N] = true;
+    distances[1] = 0;
+    for (int k=0; k < g.N-1; k++)
+        for(int i=1; i <= g.N; i++)
+            for (auto u : g.neighbors(i)) {
+                auto other = u.other(i);
+                if (distances[i] != COMP_MAX_INT)
+                    distances[other] = min(distances[other], distances[i] + u.w);
+                if (goesToM[other]) goesToM[i] = true;
+            }
+
+    // DEBUGN(goesToM);
+    // DEBUGN(distances);
+    for (int i = 1; i <= g.N; i++)
+        for (auto u : g.neighbors(i)) {
+            auto [src, dst, weight] = u;
+            if (
+                distances[src] != COMP_MAX_INT &&
+                goesToM[dst] &&
+                distances[src] + weight < distances[dst]) {
+                return -1;
+            }
+        }
+    return -distances[g.N];
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    WGraph g = read_graph();
+    // cout << g;
+    cout << bellman_ford(g) << endl;
+    return 0;
+}

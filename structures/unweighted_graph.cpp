@@ -4,7 +4,6 @@
 
 using namespace std;
 
-
 struct UWGraph {
     vector<vector<int>> adj;
     int N, M;

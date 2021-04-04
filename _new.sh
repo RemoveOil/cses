@@ -1,1 +1,1 @@
-cp "./__template.cpp" "./$1.cpp"
+cp "./__template.cpp" "./$2/$1.cpp"

@@ -7,7 +7,6 @@ using ulli = unsigned long long int;
 using lli = long long int;
 
 #define MAXN 502
-#define YETERINCE_MAX 
 
 lli matrix[MAXN][MAXN];
 int N, M, NUM_QUERIES;
