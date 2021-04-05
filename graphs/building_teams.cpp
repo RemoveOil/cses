@@ -9,17 +9,17 @@ using ulli = unsigned long long int;
 using lli = long long int;
 
 vector<int> el_colors;
-bool sictik = false;
+bool kutabatta = false;
 
 // mesajlarin arg order
 void dfs (const UWGraph &graph, int cur_node, int cur_color) {
-    if (sictik)
+    if (kutabatta)
         return;
 
     int next_color = 3 - cur_color;
     for (int neighbor : graph.adj[cur_node]) {
         if (el_colors[neighbor] && el_colors[neighbor] != next_color)
-            sictik = true;
+            kutabatta = true;
 
         if (!el_colors[neighbor]) {
             el_colors[neighbor] = next_color;
@@ -42,7 +42,7 @@ int main() {
         }
     }
 
-    if (sictik) cout << "IMPOSSIBLE";
+    if (kutabatta) cout << "IMPOSSIBLE";
     else for(int i = 1; i < el_colors.size(); ++i) cout << el_colors[i] << " ";
     cout << endl;
 
