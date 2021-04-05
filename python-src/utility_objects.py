@@ -19,7 +19,7 @@ class IncludeDirectives:
             return False
         if angle_match:
             self.angles.append(angle_match.group(1))
-        if IncludeDirectives.QUOTE_PATTERN.match(line):
+        if quote_match:
             self.quotes.append(quote_match.group(1))
         return True
 
