@@ -4,7 +4,7 @@ from utility_objects import MakeBelievePreprocessor
 
 def path_to_entry_file():
     parser = argparse.ArgumentParser()
-    parser.add_argument('src_path', type=str, help='Relative? path of cpp file.')
+    parser.add_argument('src_path', type=str, help='Absolute path of cpp file.')
     return parser.parse_args().src_path
 
 

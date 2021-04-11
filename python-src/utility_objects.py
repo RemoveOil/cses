@@ -69,7 +69,7 @@ class MakeBelievePreprocessor:
                     file_stack.append(dependency_file)
 
         if not nx.is_directed_acyclic_graph(self.dependency_graph):
-            raise SystemError('fucked up dependency tree at hand.')
+            raise SystemError('Vicious cycle detected.')
 
     def merge_files_and_print(self):
         merged_lines = []
@@ -78,7 +78,6 @@ class MakeBelievePreprocessor:
         for file_path in reversed(files_in_reverse_order):
             merged_lines.extend(self.local_files[file_path].body_lines)
 
-        # TODO: remove comments?
         # TODO: optimise namespace lines?  -> i.e skip lines of using namespace xxx if namespace is already xxx
         # TODO: wrap this bit in a function? if you do, also wrap above merging bits in another one?
         # TODO: write tests for regex
