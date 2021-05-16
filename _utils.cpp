@@ -1,3 +1,5 @@
+#ifndef __UTILS__
+#define __UTILS__
 #include <iostream>
 #include <vector>
 #include <type_traits>
@@ -60,3 +62,5 @@ int main() {
 // }
 
 // namespace utils { }
+
+#endif

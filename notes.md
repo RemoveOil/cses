@@ -42,3 +42,4 @@ It helps you implement new binary operations for segment tree. The main feature 
 - Implement? Interesting Algs
   -  traveling salesman
   -  euler circuit(this is a loop)
+- Git submodules - for registerign repos as dependencies.
