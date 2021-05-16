@@ -31,22 +31,25 @@ struct WeightedEdge {
 
 // consider using hash sets if performance becomes a concern.
 struct WGraph {
-    vector<set<WeightedEdge>> adj; // adj.size()  <--- bu guvenilir bi sey degil
+    vector<set<WeightedEdge>> adj;
     int N, M;
-    bool directed;
+    bool directed, one_indexed;
     vector<int> extras;
 
-    WGraph(int _N, bool _directed = false): directed(_directed), N(_N) {
-        adj.resize(N + 1);
+    WGraph(int N,
+           bool directed = false,
+           bool one_indexed = false): directed(directed), N(N), one_indexed(one_indexed) {
+        if (one_indexed) ++N;
+        adj.resize(N);
     }
 
-    WGraph(istream &stream, bool _directed = false) {
-
-        // vector<T> values;
-        directed = _directed;
-        stream >> N >> M;///
+    WGraph(istream &stream,
+           bool directed = false,
+           bool one_indexed = false): directed(directed), one_indexed(one_indexed) {
+        stream >> N >> M;
+        if (one_indexed) ++N;
         read_extras(stream);
-        adj.resize(N + 1); // N or N + 1
+        adj.resize(N);
         for (int i = 0, src, dst, weight; i < M; ++i) {
             stream >> src >> dst >> weight; 
             __add_edge(src, dst, weight);
@@ -76,7 +79,7 @@ struct WGraph {
     const vector<WeightedEdge> neighbors(int p) const { return vector<WeightedEdge>(adj[p].begin(), adj[p].end()); }
 
     friend ostream& operator<<(ostream& os, const WGraph& graph) {
-        for (int i = 1; i < graph.adj.size(); ++i) {
+        for (int i = graph.one_indexed; i < graph.adj.size(); ++i) {
             os << i << ": ";
             os << graph.neighbors(i);
         }
