@@ -1,6 +1,10 @@
 #include <iostream>
 #include <vector>
 #include <set>
+#include <iterator>
+#include <sstream>
+
+#include "../_utils.cpp"
 
 using namespace std;
 
@@ -30,6 +34,7 @@ struct WGraph {
     vector<set<WeightedEdge>> adj; // adj.size()  <--- bu guvenilir bi sey degil
     int N, M;
     bool directed;
+    vector<int> extras;
 
     WGraph(int _N, bool _directed = false): directed(_directed), N(_N) {
         adj.resize(N + 1);
@@ -39,12 +44,22 @@ struct WGraph {
 
         // vector<T> values;
         directed = _directed;
-        stream >> N >> M;
-        adj.resize(N+1); // N or N + 1
+        stream >> N >> M;///
+        read_extras(stream);
+        adj.resize(N + 1); // N or N + 1
         for (int i = 0, src, dst, weight; i < M; ++i) {
             stream >> src >> dst >> weight; 
             __add_edge(src, dst, weight);
         }
+    }
+
+    void read_extras(istream &stream) {
+        string rest_of_first_line;
+        getline(stream, rest_of_first_line);
+        stringstream cocuk(rest_of_first_line);
+        extras = vector<int>(
+            istream_iterator<int>(cocuk),
+            istream_iterator<int>());
     }
 
     void add_edge(int src, int dst, int weight) {
