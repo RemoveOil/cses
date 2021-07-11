@@ -41,10 +41,7 @@ void init() {
         for (int j = 0; j < 26; ++j)
             bucket_addresses[i][j] = match_length(Q, Q.substr(0, i) + (char)('A' + j));
 }
-6
-B[BABA]C
-26 -> 676*3 = 2028 -3/5
-1800 + 210 + 18
+
 int solve() {
     for (int i = 0; i < n; ++i)
         for (int j = 0; j < Q.size(); ++j)
