@@ -4,67 +4,38 @@
 
 using namespace std;
 
+// needs to explain even indices
 
+// When even == ture
+//    radii[i]'s symmetrical center is between the indices i and i - 1, filling radii in indice i.
+void manacher_helper(const string& s, vector<size_t> &radii, bool even = true) {
+    int l = 0, r = -1;
+    for (auto i = 0; i < s.size(); ++i) {
+        radii[i] = (i > r) ? (size_t) !even : min(radii[r - i + l + even], (size_t)(r - i + 1));
+        while(0 <= i - radii[i] - even && i + radii[i] < s.size()
+                && s[i - radii[i] - even] == s[i + radii[i]]) {
+            l = i - radii[i] - even;
+            r = i + radii[i];
+            radii[i]++;
+        }
+    }
+}
+
+vector<vector<size_t>> manacher(const string& s) {
+    vector<vector<size_t>> res(2, vector<size_t>(s.size()));
+    manacher_helper(s, res[0], false); // res[0][i] == k -> length == 2k - 1
+    manacher_helper(s, res[1]); // res[1][i] == k -> length == 2k
+    return res;
+}
 
 vector<size_t> calculate_z(const string& s) {
     vector<size_t> z(s.size());
-    size_t x = 0, y = 0;
+    size_t l = 0, r = 0;
     for (auto i = 1; i < s.size(); ++i) {
-        z[i] = max((size_t)0, min(z[i - x], y - i + 1));
+        z[i] = max((size_t)0, min(z[i - l], r - i + 1));
         while(i + z[i] < s.size() && s[z[i]] == s[i+z[i]]) {
-            x = i; y = i + z[i]; z[i]++;
+            l = i; r = i + z[i]; z[i]++;
         }
     }
     return z;
-}
-
-vector<int> sort_cyclic_shifts(string const& s) {
-    int n = s.size();
-    const int alphabet = 256;
-
-    vector<int> p(n), c(n), cnt(max(alphabet, n), 0);
-    for (int i = 0; i < n; i++)
-        cnt[s[i]]++;
-    for (int i = 1; i < alphabet; i++)
-        cnt[i] += cnt[i-1];
-    for (int i = 0; i < n; i++)
-        p[--cnt[s[i]]] = i;
-    c[p[0]] = 0;
-    int classes = 1;
-    for (int i = 1; i < n; i++) {
-        if (s[p[i]] != s[p[i-1]])
-            classes++;
-        c[p[i]] = classes - 1;
-    }
-
-
-    vector<int> pn(n), cn(n);
-    for (int h = 0; (1 << h) < n; ++h) {
-        for (int i = 0; i < n; i++) {
-            pn[i] = p[i] - (1 << h);
-            if (pn[i] < 0)
-                pn[i] += n;
-        }
-        fill(cnt.begin(), cnt.begin() + classes, 0);
-        for (int i = 0; i < n; i++)
-            cnt[c[pn[i]]]++;
-        for (int i = 1; i < classes; i++)
-            cnt[i] += cnt[i-1];
-        for (int i = n-1; i >= 0; i--)
-            p[--cnt[c[pn[i]]]] = pn[i];
-
-        cn[p[0]] = 0;
-        classes = 1;
-        for (int i = 1; i < n; i++) {
-            pair<int, int> cur = {c[p[i]], c[(p[i] + (1 << h)) % n]};
-            pair<int, int> prev = {c[p[i-1]], c[(p[i-1] + (1 << h)) % n]};
-            if (cur != prev) {
-                ++classes;
-                if (i == 1) return // think about removing this.
-            }
-            cn[p[i]] = classes - 1;
-        }
-        c.swap(cn);
-    }
-    return p;
 }
