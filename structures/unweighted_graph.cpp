@@ -8,6 +8,8 @@ struct UWGraph {
     vector<vector<int>> adj;
     int N, M;
     bool directed, one_indexed;
+    
+    UWGraph() { }
 
     UWGraph(istream &stream,
             bool directed = false,
@@ -22,7 +24,14 @@ struct UWGraph {
             if (!directed)  adj[dst].push_back(src);
         }
     }
-    
+
+    UWGraph(int N,
+           bool directed = false,
+           bool one_indexed = false): directed(directed), N(N), one_indexed(one_indexed) {
+        if (one_indexed) ++N;
+        adj.resize(N);
+    }
+
     void add_edge(int src, int dst) {
         adj[src].push_back(dst);
         if (!directed)  adj[dst].push_back(src);
