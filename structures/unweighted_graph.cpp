@@ -26,8 +26,8 @@ struct UWGraph {
     }
 
     UWGraph(int N,
-           bool directed = false,
-           bool one_indexed = false): directed(directed), N(N), one_indexed(one_indexed) {
+            bool directed = false,
+            bool one_indexed = false): directed(directed), N(N), one_indexed(one_indexed) {
         if (one_indexed) ++N;
         adj.resize(N);
     }
