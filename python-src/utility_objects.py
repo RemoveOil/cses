@@ -55,8 +55,8 @@ class MakeBelievePreprocessor:
         entry_path = str(Path(entry_path).absolute())
         self.entry = CppFile(entry_path)
         self.local_files: Dict[str, CppFile] = {entry_path: self.entry}
-        # print(list(self.local_files.keys()))
         self.dependency_graph = nx.DiGraph()
+        self.dependency_graph.add_node(entry_path)
 
     def read_files_and_create_dependency_graph(self):
         file_stack = [self.entry]

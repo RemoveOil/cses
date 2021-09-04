@@ -20,5 +20,6 @@ fi
 
 . "$PYTHON_SRC_DIR/env/bin/activate" &&
 python "$PYTHON_SRC_DIR/shipit.py" "$CPP_FILE_PATH" > "$SCRIPT_DIR/sendit.cpp" &&
+python "$PYTHON_SRC_DIR/submit_file.py" "$CPP_FILE_PATH" "$SCRIPT_DIR/sendit.cpp" &&
 deactivate &&
 echo "Donezie."
