@@ -3,6 +3,7 @@ bpython==0.21
 certifi==2020.12.5
 chardet==4.0.0
 chromedriver==2.24.1
+chromedriver-py==95.0.4638.17 # needs to be updated after f*cking chrome major update
 curtsies==0.3.5
 cwcwidth==0.1.4
 decorator==4.4.2
