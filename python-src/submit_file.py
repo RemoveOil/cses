@@ -54,9 +54,16 @@ def go_to_problem_page(driver: webdriver, problem_name: str):
 
 
 def cses_problem_name_of(source_file_path: str):
+    def capitalize(word: str):
+        if word.count('i') == len(word):
+            return word.upper()
+        if word in {'in', 'of', 'on', 'and'}:
+            return word
+        return word.capitalize()
+
     local_filename = source_file_path.split('/')[-1]
     problem_name = local_filename.split('.')[0]
-    return ' '.join([word.capitalize() for word in  problem_name.split('_')])
+    return ' '.join([capitalize(word) for word in  problem_name.split('_')])
 
 
 def submit_solution(driver: webdriver, local_file_path: str):
