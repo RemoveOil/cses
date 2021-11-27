@@ -13,7 +13,7 @@ lli pol_area(const vector<Point> &points) {
         res += points[i].x * points[(i+1) % n].y;
         res -= points[i].y * points[(i+1) % n].x;
     }
-    return res;
+    return abs(res);
 }
 
 
