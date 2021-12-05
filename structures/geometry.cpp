@@ -35,9 +35,8 @@ struct Point {
         return is;
     }
 
-    double dist_to_origin() {
-        return sqrt(x * x + y * y);
-    }
+    auto dist_to_origin() -> double { return sqrt(dist_e2()); }
+    auto dist_e2() -> lli { return (x * x + y * y); }
 };
 
 constexpr lli calc_det(const Point& x, const Point& y) { return (x.x * y.y - x.y * y.x); }
